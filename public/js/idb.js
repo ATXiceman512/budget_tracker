@@ -1,4 +1,4 @@
-// **FILE FORMATTED WITH @ext:esbenp.prettier-vscode**
+// ** FILE FORMATTED WITH @ext:esbenp.prettier-vscode **
 
 let db;
 const request = indexedDB.open('budget-tracker', 1);
