@@ -1,4 +1,4 @@
-// **FILE FORMATTED WITH @ext:esbenp.prettier-vscode**
+// ** FILE FORMATTED WITH @ext:esbenp.prettier-vscode **
 
 // Concat app name and version for easier and more dynamic cache naming
 const APP_PREFIX = "Budget_Tracker_";
