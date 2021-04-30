@@ -1,67 +1,71 @@
-const APP_PREFIX = 'BudgetTracker-';
-const VERSION = 'version_01';
-const CACHE_NAME = APP_PREFIX + VERSION;
+// ** FILE FORMATTED WITH @ext:esbenp.prettier-vscode **
+
+// Concat app name and version for easier and more dynamic cache naming
+const APP_PREFIX = "Budget_Tracker_";
+const APP_VERSION = "V01";
+const CACHE_NAME = APP_PREFIX + APP_VERSION;
 
 const FILES_TO_CACHE = [
-  './',
+  // HTML FILES
+  '/',
   './index.html',
-  './manifest.json',
-  './css/styles.css',
-  // don't include icons due to cache limits
-  './js/idb.js',
-  './js/index.js'
 
+  // JSON FILES
+  './manifest.json',
+
+  // CSS FILES
+  './css/styles',
+
+  // JS FILES
+  './js/index.js',
+  './js/idb.js'
 ]
-// use 'self' because service workers run before the window obj has been created
-// 'self' refers to the service worker obj
+
 self.addEventListener('install', function (e) {
-  // waitUntil tells broswer to wait until work is complete before terminating service worker
   e.waitUntil(
-    // finds specific cache by name and adds files to FILES_TO_CACHE array
     caches.open(CACHE_NAME).then(function (cache) {
       console.log('installing cache : ' + CACHE_NAME)
       return cache.addAll(FILES_TO_CACHE)
     })
-  )
+  );
 });
 
+// delete outdated caches
 self.addEventListener('activate', function (e) {
   e.waitUntil(
-    // .keys() returns array of cache names, called keyList
     caches.keys().then(function (keyList) {
-      let cacheKeepList = keyList.filter(function (key) {
-        // captures caches with a prefix, stores them to an array cacheKeepList using .filter()
+      // filter out ones that has this app prefix to create keeplist
+      let cacheKeeplist = keyList.filter(function (key) {
         return key.indexOf(APP_PREFIX);
       });
-      // adds the current cache to the keeplist
-      cacheKeepList.push(CACHE_NAME);
-      // returns a Promise that resolves once old versions of cache are deleted
-      return Promise.all(keyList.map(function (key, i) {
-        if (cacheKeepList.indexOf(key) === -1) {
-          console.log('deleting cache: ' + keyList[i]);
-          return caches.delete(ketList[i]);
-        }
-      }));
+      // add current cache name to keeplist
+      cacheKeeplist.push(CACHE_NAME);
+
+      return Promise.all(
+        keyList.map(function (key, i) {
+          if (cacheKeeplist.indexOf(key) === -1) {
+            console.log('deleting cache : ' + keyList[i]);
+            return caches.delete(keyList[i]);
+          }
+        })
+      );
     })
-  )
+  );
 });
 
-// listens for fetch event, logs URL of requested resource, defines how to respond to request
 self.addEventListener('fetch', function (e) {
-  console.log('fetch request: ' + e.request.url)
+  console.log("fetch request : " + e.request.url)
   e.respondWith(
-    caches.match(e.request).then(function (res) {
-      
-      if (res) {
-        console.log('responding with cache: ' + e.request.url)
-        return res
+    caches.match(e.request).then(function (request) {
+      if (request) {
+        console.log("Responding with cache : " + e.request.url)
+        return request;
       } else {
-        console.log('file is not cached, fetching: ' + e.request.url)
-        return fetch(e.request)
+        console.log("File is not cached, fetching : " + e.request.url)
+        return fetch(e.request);
       }
-      
-      //ES6 can be used instead of if else (this works!)
-      //return res || fetch(e.request)
+      // You can omit if/else for console.log & put one line below like this too.
+      // return request || fetch(e.request)
     })
   )
-});
+})
