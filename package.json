@@ -1,6 +1,9 @@
 {
   "name": "budget-app",
   "version": "1.0.0",
+  "engines": {
+    "node": "14.15.5"
+  },
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -24,7 +27,8 @@
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "mongoose": "^5.5.15",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "node": "^16.0.0"
   },
   "devDependencies": {
     "file-loader": "^6.2.0",
